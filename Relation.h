@@ -3,14 +3,16 @@
 #include <vector>
 using namespace std;
 
+
+
 template <typename T>
 class Relation {
-
 
     struct pair {
         T first;
         T second;
     };
+
 
 private:
 	vector<pair> elements;
