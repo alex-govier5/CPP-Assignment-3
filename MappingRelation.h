@@ -1,9 +1,10 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <set>
 using namespace std;
 
-template <typename A,typename B>
+template <typename A, typename B>
 class MappingRelation {
 
 	struct pair {
@@ -13,12 +14,16 @@ class MappingRelation {
 
 private:
 	vector<pair> elements;
+	set<A> one;
+	set<B> two;
 
 public:
 
 	MappingRelation();
-	MappingRelation(const MappingRelation<A,B>&);
+	MappingRelation(const MappingRelation<A, B>&);
 	~MappingRelation();
+	void add_to_setOne(A);
+	void add_to_setTwo(B);
 	int cardinality();
 	bool add_element(pair);
 	void remove_element(pair);

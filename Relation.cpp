@@ -1,6 +1,7 @@
 #include "Relation.h"
 #include <iostream>
 #include <vector>
+#include <set>
 using namespace std;
 
 template <typename T>
@@ -13,11 +14,21 @@ Relation<T>::Relation(const Relation<T>& r) {
 	for (int i = 0; i < r.cardinality(); i++) {
 		elements.push_back(r.elements[i]);
 	}
+	typename set<T>::iterator itr;
+	for (itr = r.root.begin(); itr != r.root.end(); itr++) {
+		root.insert(*itr);
+	}
 }
 
 template <typename T>
 Relation<T>::~Relation() {
 	elements.clear();
+	root.clear();
+}
+
+template<typename T>
+void Relation<T>::add_to_set(T elem) {
+	root.insert(elem);
 }
 
 template<typename T>
@@ -27,11 +38,13 @@ int Relation<T>::cardinality() {
 
 template<typename T>
 bool Relation<T>::add_element(pair elem) {
-	for (int i = 0; i < cardinality(); i++) {
-		if (elements[i].first == elem.first && elements[i].second == elem.second) {
-			return false;
-		}
+	if (root.find(elem.first) == root.end() || root.find(elem.second) == root.end()) {
+		return false;
 	}
+	if (is_member(elem)) {
+		return false;
+	}
+	
 	elements.push_back(elem);
 	return true;
 }
@@ -72,7 +85,7 @@ bool Relation<T>::operator ==(Relation<T> r) {
 }
 
 template<typename T>
-vector<T> Relation<T>::operator [](int n){
+vector<T> Relation<T>::operator [](int n) {
 	vector<T> result;
 	result.push_back(elements[n].first);
 	result.push_back(elements[n].second);
@@ -81,15 +94,10 @@ vector<T> Relation<T>::operator [](int n){
 
 template<typename T>
 bool Relation<T>::reflexive() {
-	vector<T> values;
-	for (int i = 0; i < cardinality();i++) {
-		values.push_back(elements[i].first);
-		values.push_back(elements[i].second);
-	}
-	for (int i = 0; i < values.size(); i++) {
+	typename set<T>::iterator itr;
+	for (itr = root.begin(); itr != root.end(); itr++) {
 		pair p;
-		p.first = values[i];
-		p.second = values[i];
+		p.first = p.second = *itr;
 		if (!is_member(p)) {
 			return false;
 		}
@@ -99,15 +107,10 @@ bool Relation<T>::reflexive() {
 
 template<typename T>
 bool Relation<T>::irreflexive() {
-	vector<T> values;
-	for (int i = 0; i < cardinality();i++) {
-		values.push_back(elements[i].first);
-		values.push_back(elements[i].second);
-	}
-	for (int i = 0; i < values.size(); i++) {
+	typename set<T>::iterator itr;
+	for (itr = root.begin(); itr != root.end(); itr++) {
 		pair p;
-		p.first = values[i];
-		p.second = values[i];
+		p.first = p.second = *itr;
 		if (is_member(p)) {
 			return false;
 		}
@@ -117,7 +120,7 @@ bool Relation<T>::irreflexive() {
 
 template<typename T>
 bool Relation<T>::symmetric() {
-	for (int i = 0; i < cardinality();i++) {
+	for (int i = 0; i < cardinality(); i++) {
 		if (elements[i].first == elements[i].second) {
 			continue;
 		}
@@ -135,11 +138,8 @@ bool Relation<T>::symmetric() {
 
 template<typename T>
 bool Relation<T>::asymmetric() {
-	for (int i = 0; i < cardinality();i++) {
-		if (elements[i].first == elements[i].second) {
-			continue;
-		}
-		else {
+	for (int i = 0; i < cardinality(); i++) {
+		if (elements[i].first != elements[i].second) {
 			pair p;
 			p.first = elements[i].second;
 			p.second = elements[i].first;
@@ -152,8 +152,8 @@ bool Relation<T>::asymmetric() {
 }
 template<typename T>
 bool Relation<T>::transitive() {
-	for (int i = 0; i < cardinality();i++) {
-		for (int j = 0; j < cardinality();j++) {
+	for (int i = 0; i < cardinality(); i++) {
+		for (int j = 0; j < cardinality(); j++) {
 			if (elements[j].first == elements[i].second) {
 				for (int x = 0; x < cardinality(); x++) {
 					pair p;
@@ -171,8 +171,8 @@ bool Relation<T>::transitive() {
 
 template<typename T>
 bool Relation<T>::is_function() {
-	for (int i = 0; i < cardinality();i++) {
-		for (int j = 0; j < cardinality();j++) {
+	for (int i = 0; i < cardinality(); i++) {
+		for (int j = 0; j < cardinality(); j++) {
 			if (elements[j].first == elements[i].first && elements[j].second != elements[i].second) {
 				return false;
 			}
@@ -183,39 +183,38 @@ bool Relation<T>::is_function() {
 
 template<typename T>
 Relation<T> Relation<T>::inverse() {
-	for (int i = 0; i < cardinality();i++) {
-		int temp = elements[i].first;
-		elements[i].first = elements[i].second;
-		elements[i].second = temp;
+	Relation<T> result;
+	typename set<T>::iterator itr;
+	for (itr = root.begin(); itr != root.end(); itr++) {
+		result.root.insert(*itr);
 	}
-	return *this;
+	for (int i = 0; i < cardinality(); i++) {
+		pair p;
+		p.first = elements[i].second;
+		p.second = elements[i].first;
+		result.add_element(p);
+	}
+	return result;
 }
 template<typename T>
 Relation<T> Relation<T>::combination(Relation<T> r) {
-	Relation<T> temp;
-	for (int i = 0; i < cardinality(); i++) {
-		for (int j = 0; j < r.cardinality(); j++) {
-			temp.add_element(pair{ elements[i].first, elements[j].second });
-		}
-	}
-
-	return temp;
+	
 }
 
 
 template<typename R>
 ostream& operator <<(ostream& out, Relation<R> r) {
 	out << "{ ";
-	for (int i = 0; i < r.cardinality()-1; i++) {
-		out << "(" << r.elements[i].first << ", " << r.add_element[i].second << "), ";
+	for (int i = 0; i < r.cardinality() - 1; i++) {
+		out << "(" << r.elements[i].first << ", " << r.elements[i].second << "), ";
 	}
-	out << "(" << r.elements[r.cardinality()-1].first << ", " << r.add_element[r.cardinality()-1].second << ") ";
+	out << "(" << r.elements[r.cardinality() - 1].first << ", " << r.elements[r.cardinality() - 1].second << ") ";
 	out << "}";
 	return out;
 }
 
 int main() {
-	
+
 
 }
 

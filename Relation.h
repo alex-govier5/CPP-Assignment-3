@@ -1,9 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <set>
 using namespace std;
-
-
 
 template <typename T>
 class Relation {
@@ -15,12 +14,14 @@ class Relation {
 
 
 private:
-	vector<pair> elements;
+    vector<pair> elements;
+    set<T> root;
 
 public:
     Relation();
     Relation(const Relation<T>&);
     ~Relation();
+    void add_to_set(T);
     int cardinality();
     bool add_element(pair);
     void remove_element(pair);
