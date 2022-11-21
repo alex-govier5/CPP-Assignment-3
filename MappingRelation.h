@@ -31,7 +31,7 @@ public:
 	bool operator ==(MappingRelation<A, B>);
 	MappingRelation<A, B> operator +(MappingRelation<A, B>);
 	MappingRelation<A, B> operator -(MappingRelation<A, B>);
-	vector<A,B> operator[](int);
+	vector<A, B> operator[](int);
 	MappingRelation<A, B> intersection(MappingRelation<A, B>);
 	bool is_function();
 	template<typename C, typename D> friend ostream& operator <<(ostream&, MappingRelation<C, D>);

@@ -104,7 +104,7 @@ MappingRelation<A, B> MappingRelation<A, B>::operator -(MappingRelation<A, B> m)
 	return *this;
 }
 template<typename A, typename B>
-vector<A,B> MappingRelation<A, B>::operator [](int n) {
+vector<A, B> MappingRelation<A, B>::operator [](int n) {
 	vector<A, B> result;
 	result.push_back(elements[n].first);
 	result.push_back(elements[n].second);
