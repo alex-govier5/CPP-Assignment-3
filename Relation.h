@@ -23,11 +23,11 @@ public:
     ~Relation();
     void add_to_set(T);
     int cardinality();
-    bool add_element(pair);
-    void remove_element(pair);
-    bool is_member(pair);
+    bool add_element(T, T);
+    void remove_element(T, T);
+    bool is_member(T, T);
     bool operator ==(Relation<T>);
-    vector<T> operator [](int);
+    vector<T> operator [](T);
     bool reflexive();
     bool irreflexive();
     bool symmetric();

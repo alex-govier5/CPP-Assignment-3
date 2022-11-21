@@ -37,32 +37,42 @@ int Relation<T>::cardinality() {
 }
 
 template<typename T>
-bool Relation<T>::add_element(pair elem) {
+bool Relation<T>::add_element(T elem1, T elem2) {
+	pair elem;
+	elem.first = elem1;
+	elem.second = elem2;
 	if (root.find(elem.first) == root.end() || root.find(elem.second) == root.end()) {
 		return false;
 	}
-	if (is_member(elem)) {
+	if (is_member(elem.first, elem.second)) {
 		return false;
 	}
 	
 	elements.push_back(elem);
 	return true;
 }
+
 template<typename T>
-void Relation<T>::remove_element(pair elem) {
+void Relation<T>::remove_element(T elem1, T elem2) {
+	pair elem;
+	elem.first = elem1;
+	elem.second = elem2;
 	if (cardinality() == 0) {
 		return;
 	}
 	for (int i = 0; i < cardinality(); i++) {
 		if (elements[i].first == elem.first && elements[i].second == elem.second) {
-			elements.erase(i);
+			elements.erase(elements.begin() + i);
 		}
 	}
 	return;
 }
 
 template<typename T>
-bool Relation<T>::is_member(pair elem) {
+bool Relation<T>::is_member(T elem1, T elem2) {
+	pair elem;
+	elem.first = elem1;
+	elem.second = elem2;
 	for (int i = 0; i < cardinality(); i++) {
 		if (elements[i].first == elem.first && elements[i].second == elem.second) {
 			return true;
@@ -77,7 +87,8 @@ bool Relation<T>::operator ==(Relation<T> r) {
 		return false;
 	}
 	for (int i = 0; i < cardinality(); i++) {
-		if (!is_member(r.elements[i])) {
+		pair p = r.elements[i];
+		if (!is_member(p.first, p.second)) {
 			return false;
 		}
 	}
@@ -85,7 +96,7 @@ bool Relation<T>::operator ==(Relation<T> r) {
 }
 
 template<typename T>
-vector<T> Relation<T>::operator [](int n) {
+vector<T> Relation<T>::operator [](T n) {
 	vector<T> result;
 	result.push_back(elements[n].first);
 	result.push_back(elements[n].second);
@@ -98,7 +109,7 @@ bool Relation<T>::reflexive() {
 	for (itr = root.begin(); itr != root.end(); itr++) {
 		pair p;
 		p.first = p.second = *itr;
-		if (!is_member(p)) {
+		if (!is_member(p.first, p.second)) {
 			return false;
 		}
 	}
@@ -111,7 +122,7 @@ bool Relation<T>::irreflexive() {
 	for (itr = root.begin(); itr != root.end(); itr++) {
 		pair p;
 		p.first = p.second = *itr;
-		if (is_member(p)) {
+		if (is_member(p.first, p.second)) {
 			return false;
 		}
 	}
@@ -128,7 +139,7 @@ bool Relation<T>::symmetric() {
 			pair p;
 			p.first = elements[i].second;
 			p.second = elements[i].first;
-			if (!is_member(p)) {
+			if (!is_member(p.first, p.second)) {
 				return false;
 			}
 		}
@@ -143,7 +154,7 @@ bool Relation<T>::asymmetric() {
 			pair p;
 			p.first = elements[i].second;
 			p.second = elements[i].first;
-			if (is_member(p)) {
+			if (is_member(p.first, p.second)) {
 				return false;
 			}
 		}
@@ -159,7 +170,7 @@ bool Relation<T>::transitive() {
 					pair p;
 					p.first = elements[i].first;
 					p.second = elements[j].second;
-					if (!is_member(p)) {
+					if (!is_member(p.first, p.second)) {
 						return false;
 					}
 				}
@@ -186,16 +197,15 @@ Relation<T> Relation<T>::inverse() {
 	Relation<T> result;
 	typename set<T>::iterator itr;
 	for (itr = root.begin(); itr != root.end(); itr++) {
-		result.root.insert(*itr);
+	 	result.root.insert(*itr);
 	}
+
 	for (int i = 0; i < cardinality(); i++) {
-		pair p;
-		p.first = elements[i].second;
-		p.second = elements[i].first;
-		result.add_element(p);
+		result.add_element(elements[i].second, elements[i].first);
 	}
 	return result;
 }
+
 template<typename T>
 Relation<T> Relation<T>::combination(Relation<T> r) {
 	
@@ -212,9 +222,3 @@ ostream& operator <<(ostream& out, Relation<R> r) {
 	out << "}";
 	return out;
 }
-
-int main() {
-
-
-}
-
