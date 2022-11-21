@@ -22,7 +22,7 @@ public:
     Relation(const Relation<T>&);
     ~Relation();
     void add_to_set(T);
-    int cardinality();
+    int cardinality() const;
     bool add_element(T, T);
     void remove_element(T, T);
     bool is_member(T, T);

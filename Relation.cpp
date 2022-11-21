@@ -32,7 +32,7 @@ void Relation<T>::add_to_set(T elem) {
 }
 
 template<typename T>
-int Relation<T>::cardinality() {
+int Relation<T>::cardinality() const {
 	return elements.size();
 }
 
