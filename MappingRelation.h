@@ -22,18 +22,18 @@ public:
 	MappingRelation();
 	MappingRelation(const MappingRelation<A, B>&);
 	~MappingRelation();
-	void add_to_setOne(A);
-	void add_to_setTwo(B);
 	int cardinality();
-	bool add_element(pair);
-	void remove_element(pair);
-	bool is_member(pair);
+	bool add_element(A,B);
+	void remove_element(A,B);
+	bool is_member(A,B);
 	bool operator ==(MappingRelation<A, B>);
 	MappingRelation<A, B> operator +(MappingRelation<A, B>);
 	MappingRelation<A, B> operator -(MappingRelation<A, B>);
-	vector<A, B> operator[](int);
+	vector<B> operator[](A);
 	MappingRelation<A, B> intersection(MappingRelation<A, B>);
 	bool is_function();
+	MappingRelation<A, B> inverse();
+	MappingRelation<A, B> combination(MappingRelation<A, B>);
 	template<typename C, typename D> friend ostream& operator <<(ostream&, MappingRelation<C, D>);
 
 };

@@ -45,6 +45,7 @@ bool Relation<T>::add_element(T elem1, T elem2) {
 		return false;
 	}
 	if (is_member(elem.first, elem.second)) {
+		
 		return false;
 	}
 
@@ -216,13 +217,31 @@ Relation<T> Relation<T>::inverse() {
 template<typename T>
 Relation<T> Relation<T>::combination(Relation<T> r) {
 	Relation<T> result;
-
+	typename set<T>::iterator itr;
+	for (itr = root.begin(); itr != root.end(); itr++) {
+		result.add_to_set(*itr);
+	}
+	typename set<T>::iterator itr2;
+	for (itr2 = r.root.begin(); itr2 != r.root.end(); itr2++) {
+		result.add_to_set(*itr2);
+	}
+	for (int i = 0; i < cardinality(); i++) {
+		for (int j = 0; j < r.cardinality(); j++) {
+			if (elements[i].second == r.elements[j].first) {
+				result.add_element(elements[i].first, r.elements[j].second);
+			}
+		}
+	}
 	return result;
 }
 
 
 template<typename R>
 ostream& operator <<(ostream& out, Relation<R> r) {
+	if (r.cardinality() == 0) {
+		out << "{ }";
+		return out;
+	}
 	out << "{ ";
 	for (int i = 0; i < r.cardinality() - 1; i++) {
 		out << "(" << r.elements[i].first << ", " << r.elements[i].second << "), ";
@@ -231,7 +250,7 @@ ostream& operator <<(ostream& out, Relation<R> r) {
 	out << "}";
 	return out;
 }
-
+/*
 int main() {
 	Relation <string> r1, r2;
 
@@ -389,45 +408,43 @@ int main() {
 	Relation<string> r3 = r1.inverse();
 
 	//Testing operator ==
-	cout << r3 << endl;
-	cout << r2.inverse() << endl;
 	if (r3 == r2.inverse()) cout << "operator == - Test 1 - Passed." << endl;
 	else cout << "operator == - Test 1 - Failed!" << endl;
 
 	if (!(r1 == r2)) cout << "operator == - Test 2 - Passed." << endl;
 	else cout << "operator == - Test 2 - Failed!" << endl;
 
+
+	//Testing operator []
+	int i;
+	vector <string> v = r1["apple"];
+	if (v[0] == "apple" && v[1] == "banana" && v.size() == 2) cout << "operator [] - Test 1 - Passed." << endl;
+	else cout << "operator [] - Test 1 - Failed!" << endl;
+
+	v = r2["orange"];
+	if (v.size() == 0) cout << "operator [] - Test 2 - Passed." << endl;
+	else cout << "operator [] - Test 2 - Failed!" << endl;
+
+	Relation <string> r4 = r2.inverse();
+	Relation <string> r5 = r1.combination(r2);
+	Relation <string> r6 = r2.combination(r1);
+
+	cout << "r1 = " << r1 << endl;
+	cout << "r2 = " << r2 << endl;
+
+	cout << "r1-inverse = " << r3 << endl;
+	cout << "r2-inverse = " << r4 << endl;
+
+	cout << "R1oR2 = " << r5 << endl;
+	cout << "R2oR1 = " << r6 << endl;
+
+	/*Should be printed
+	r1 = { (apple, apple), (apple, banana), (banana, apple), (banana, banana), (banana, orange), (cherry, cherry), (orange, orange) }
+	r2 = { (apple, cherry), (banana, apple), (cherry, cherry) }
+	r1-inverse = { (apple, apple), (apple, banana), (banana, apple), (banana, banana), (cherry, cherry), (orange, banana), (orange, orange) }
+	r2-inverse = { (apple, banana), (cherry, apple), (cherry, cherry) }
+	R1oR2 = { (apple, apple), (apple, cherry), (banana, apple), (banana, cherry), (cherry, cherry) }
+	R2oR1 = { (apple, cherry), (banana, apple), (banana, banana), (cherry, cherry) }
 	
-		//Testing operator []
-		int i;
-		vector <string> v = r1["apple"];
-		if (v[0] == "apple" && v[1] == "banana" && v.size() == 2) cout << "operator [] - Test 1 - Passed." << endl;
-		else cout << "operator [] - Test 1 - Failed!" << endl;
-
-		v = r2["orange"];
-		if (v.size() == 0) cout << "operator [] - Test 2 - Passed." << endl;
-		else cout << "operator [] - Test 2 - Failed!" << endl;
-
-		Relation <string> r4 = r2.inverse();
-		Relation <string> r5 = r1.combination(r2);
-		Relation <string> r6 = r2.combination(r1);
-
-		cout << "r1 = " << r1 << endl;
-		cout << "r2 = " << r2 << endl;
-
-		cout << "r1-inverse = " << r3 << endl;
-		cout << "r2-inverse = " << r4 << endl;
-
-		//cout << "R1oR2 = " << r5 << endl;
-		//cout << "R2oR1 = " << r6 << endl;
-
-		/*Should be printed
-		r1 = { (apple, apple), (apple, banana), (banana, apple), (banana, banana), (banana, orange), (cherry, cherry), (orange, orange) }
-		r2 = { (apple, cherry), (banana, apple), (cherry, cherry) }
-		r1-inverse = { (apple, apple), (apple, banana), (banana, apple), (banana, banana), (cherry, cherry), (orange, banana), (orange, orange) }
-		r2-inverse = { (apple, banana), (cherry, apple), (cherry, cherry) }
-		R1oR2 = { (apple, apple), (apple, cherry), (banana, apple), (banana, cherry), (cherry, cherry) }
-		R2oR1 = { (apple, cherry), (banana, apple), (banana, banana), (cherry, cherry) }
-		*/
 	return 0;
-}
+}*/
