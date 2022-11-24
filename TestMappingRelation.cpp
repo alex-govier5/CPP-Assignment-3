@@ -1,3 +1,6 @@
+// Alex Govier 300174954
+// Taj Loodu 300128141
+
 #include <iostream>
 #include "MappingRelation.cpp"
 #include <vector>
@@ -56,7 +59,7 @@ int main()
 	numbers.add_element("Germany", 7);
 
 	//Testing Cardinality
-	if (nations.cardinality() == 5) cout << "Cardinality - Test 1 - Passed." << endl;
+	if (nations.cardinality() == 6) cout << "Cardinality - Test 1 - Passed." << endl;
 	else cout << "Cardinality - Test 1 - Failed!" << endl;
 
 	if (numbers.cardinality() == 6) cout << "Cardinality - Test 2 - Passed." << endl;

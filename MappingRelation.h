@@ -1,3 +1,6 @@
+// Alex Govier 300174954
+// Taj Loodu 300128141
+
 #pragma once
 #include <iostream>
 #include <vector>

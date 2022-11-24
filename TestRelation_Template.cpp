@@ -1,15 +1,12 @@
 #include <iostream>
-#include "Relation.h"
 #include "Relation.cpp"
 #include <vector>
-#include <string>
 
 using namespace std;
 
 int main()
 {
 	Relation <string> r1, r2;
-
 
 	r1.add_to_set("apple");
 	r1.add_to_set("orange");
@@ -27,7 +24,6 @@ int main()
 	r1.add_element("cherry", "cherry");
 	r1.add_element("apple", "banana");
 
-
 	//Testing Cardinality
 	if (r1.cardinality() == 5) cout << "Cardinality - Test 1 - Passed." << endl;
 	else cout << "Cardinality - Test 1 - Failed!" << endl;
@@ -38,7 +34,6 @@ int main()
 	r2.add_element("cherry", "banana");
 	if (r2.cardinality() == 1) cout << "Cardinality - Test 3 - Passed." << endl;
 	else cout << "Cardinality - Test 3 - Failed!" << endl;
-
 
 	//Testing is_member
 	if (r1.is_member("apple", "apple")) cout << "is_member - Test 1 - Passed." << endl;
@@ -52,7 +47,6 @@ int main()
 
 	if (r2.is_member("cherry", "banana")) cout << "is_member - Test 4 - Passed." << endl;
 	else cout << "is_member - Test 4 - Failed!" << endl;
-
 
 	//Testing add_element
 	r1.add_element("orange", "banana");
@@ -104,7 +98,6 @@ int main()
 	r2.remove_element("banana", "banana");
 	if (r2.irreflexive()) cout << "irreflexive - Test 3 - Passed." << endl;
 	else cout << "irreflexive - Test 3 - Failed!" << endl;
-
 
 	//Testing symmetric
 	r1.add_element("banana", "apple");
@@ -161,16 +154,15 @@ int main()
 	if (r2.is_function()) cout << "is_function - Test 3 - Passed." << endl;
 	else cout << "is_function - Test 3 - Failed!" << endl;
 
-	Relation<string> r3 = r1.inverse();
-
+	Relation <string> r3 = r1.inverse();
+	
 	//Testing operator ==
-	if (r3 == r2.inverse()) cout << "operator == - Test 1 - Passed." << endl;
+	if (r3 == r1.inverse()) cout << "operator == - Test 1 - Passed." << endl;
 	else cout << "operator == - Test 1 - Failed!" << endl;
 
 	if (!(r1 == r2)) cout << "operator == - Test 2 - Passed." << endl;
 	else cout << "operator == - Test 2 - Failed!" << endl;
 
-/*
 	//Testing operator []
 	int i;
 	vector <string> v = r1["apple"];

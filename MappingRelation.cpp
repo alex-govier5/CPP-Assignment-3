@@ -1,7 +1,11 @@
+// Alex Govier 300174954
+// Taj Loodu 300128141
+
 #include "MappingRelation.h"
 #include <iostream>
 #include <vector>
 #include <set>
+#include <algorithm>
 using namespace std;
 
 template<typename A, typename B>
@@ -121,6 +125,7 @@ vector<B> MappingRelation<A, B>::operator [](A n) {
 			result.push_back(elements[i].second);
 		}
 	}
+	sort(result.begin(), result.end());
 	return result;
 }
 
